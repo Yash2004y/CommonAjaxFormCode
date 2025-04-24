@@ -7,6 +7,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Common Ajax Form Code</title>
     <style>
         * {
@@ -23,13 +27,77 @@
 
             <div class="row justify-content-center p-2 ">
                 <div class="col-lg-7">
-                    <div class="card" style="background: #f5b7b1;box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
+                    <div class="card"
+                        style="background: #f5b7b1;box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
                         <div class="card-body p-0">
-                            <h5 class="card-title mb-3 p-2" style="border-bottom:3px groove #fcf3cf;">Common Ajax Form</h5>
-                            <form class="row p-3">
+                            <h5 class="card-title mb-2 p-2" style="border-bottom:3px groove #fcf3cf;">Common Ajax Form
+                            </h5>
+                            <form class="row p-3 ajaxForm" method="post" data-url="{{ route('store') }}"
+                                data-loder-function-name="setAjaxFormLoder">
+                                @csrf
+                                <div class="col-md-6">
+                                    <label for="inputEmail4" class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control" id="inputEmail4">
+                                    <small class="text-danger error-common email-error"></small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputPassword4" class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" id="inputPassword4">
+                                    <small class="text-danger error-common password-error"></small>
 
-                                <div class="col-lg-12">
-                                    <button type="button" class="btn btn-primary">Submit</button>
+                                </div>
+                                <div class="col-12">
+                                    <label for="inputAddress" class="form-label">Address</label>
+                                    <input type="text" name="address1" class="form-control" id="inputAddress"
+                                        placeholder="1234 Main St">
+                                    <small class="text-danger error-common address1-error"></small>
+
+                                </div>
+                                <div class="col-12">
+                                    <label for="inputAddress2" class="form-label">Address 2</label>
+                                    <input type="text" name="address2" class="form-control" id="inputAddress2"
+                                        placeholder="Apartment, studio, or floor">
+                                    <small class="text-danger error-common address2-error"></small>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputCity" class="form-label">City</label>
+                                    <input type="text" name="city" class="form-control" id="inputCity">
+                                    <small class="text-danger error-common city-error"></small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="inputState" class="form-label">State</label>
+                                    <select id="inputState" name="state" class="form-select">
+                                        <option selected>Choose...</option>
+                                        <option>Gujrat</option>
+                                        <option>Mharastra</option>
+                                        <option>Rajsthan</option>
+                                    </select>
+                                    <small class="text-danger error-common state-error"></small>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="inputZip" class="form-label">Zip</label>
+                                    <input type="text" class="form-control" name="zip" id="inputZip">
+                                    <small class="text-danger error-common zip-error"></small>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="check_me_out" type="checkbox"
+                                            id="gridCheck">
+                                        <label class="form-check-label" for="gridCheck">
+                                            Check me out
+                                        </label><br>
+                                        <small class="text-danger error-common check_me_out-error"></small>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mt-2">
+                                    <button type="submit"
+                                        class="btn btn-primary d-flex align-content-center align-items-center gap-3"
+                                        style="vertical-align:middle;">Submit
+
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -43,6 +111,108 @@
 
 </body>
 
+<script>
+    function setAjaxFormLoder(formClass, state) {
+        // console.log(formClass)
+        var form = $(`.${formClass}`);
+        if (form) {
+            var submitBtn = form.find("button[type='submit']");
+            var oldText = submitBtn.text();
+            var spinner = `
+                    <div class="spinner-border" role="status" style="width: 1.3rem;height:1.3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+
+    `;
+            spinner = $(spinner);
+            submitBtn.prop('disabled', state)
+            if (state) {
+                submitBtn.append(spinner);
+            } else {
+                submitBtn.children(spinner).remove()
+            }
+        }
+
+    }
+
+    $(document).ready(function() {
+
+
+        // setLoder("ajaxForm", true);
+        $(".ajaxForm").submit(function(e) {
+            e.preventDefault();
+            const URL = $(this).data("url");
+            const LoderFunctionName = $(this).data('loder-function-name');
+            const METHOD = $(this).prop("method").toUpperCase();
+            // const submitter = e.originalEvent?.submitter;
+            var formData = new FormData(this);
+            if (METHOD == "GET") {
+                formData = $(this).serialize();
+            }
+            //run loder
+            if (typeof window[LoderFunctionName] === "function") {
+                window[LoderFunctionName]("ajaxForm", true);
+            }
+
+
+            // Optional: debug log
+            console.log(METHOD)
+            if (METHOD != "GET") {
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
+            }
+
+
+            if (URL && URL != "") {
+                $.ajax({
+                    url: URL,
+                    data: formData,
+                    method: METHOD,
+                    success: function(res) {
+                        //stop loder
+                        if (typeof window[LoderFunctionName] === "function") {
+                            window[LoderFunctionName]("ajaxForm", false);
+                        }
+
+                        console.log(res);
+                        Swal.fire({
+                            title: "The Internet?",
+                            icon: "error",
+                            confirmButtonColor: "#0d6efd",
+                        });
+
+                    },
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    error: function(xhr, status, error) {
+                        //stop loder
+                        if (typeof window[LoderFunctionName] === "function") {
+                            window[LoderFunctionName]("ajaxForm", false);
+                        }
+                        var errorRes = xhr.responseJSON;
+                        var status = xhr.status;
+                        if (status == 422) {
+                            var error = errorRes?.error;
+                        } else {
+                            Swal.fire({
+                                title: errorRes?.message ?? "",
+                                icon: "error",
+                                confirmButtonColor: "#0d6efd",
+                            });
+                        }
+                        // console.log(xhr);
+                    }
+
+                });
+            }
+
+        })
+
+
+    })
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
 </script>
@@ -52,5 +222,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"
     integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous">
 </script>
+
+
 
 </html>
