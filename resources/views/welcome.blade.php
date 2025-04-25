@@ -33,7 +33,16 @@
                             <h5 class="card-title mb-2 p-2" style="border-bottom:3px groove #fcf3cf;">Common Ajax Form
                             </h5>
                             <form class="row p-3 ajaxForm" method="post" data-url="{{ route('store') }}"
-                                data-loder-function-name="setAjaxFormLoder">
+                                data-loder-function-name="setAjaxFormLoder" data-common-error-class="error-common"
+                                data-after-success-function-name="afterSuccessForm">
+                                {{-- data-url -> set url where send form data --}}
+                                {{-- data-loder-function-name -> function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
+                                {{-- data-common-error-class -> set class name which available in each error display span or small (use for clear error) --}}
+                                {{-- data-after-success-function-name => function name which is call after response status true and status code 200 it has two argument
+                                        1. res -> response of ajax
+                                        2. swalEventObj => swal dissmiss event obj
+                                        ->in this method you set action that perform after submit form or success
+                                --}}
                                 @csrf
                                 <div class="col-md-6">
                                     <label for="inputEmail4" class="form-label">Email</label>
@@ -135,6 +144,15 @@
 
     }
 
+    function afterSuccessForm(res, swalAction) {
+        //res is response of ajax (when status true and status  code 200)
+        //swalAction is a event obj of swal dismiss
+        // console.log(res, swalAction);
+
+        if(res.redirect && res.redirect != ""){
+            window.location.href = res.redirect;
+        }
+    }
     $(document).ready(function() {
 
 
@@ -144,6 +162,11 @@
             const URL = $(this).data("url");
             const LoderFunctionName = $(this).data('loder-function-name');
             const METHOD = $(this).prop("method").toUpperCase();
+            const CommonErrorClass = $(this).data("common-error-class");
+            const AfterSuccessForm = $(this).data("after-success-function-name");
+
+            $(`.${CommonErrorClass}`).html("");
+            // console.log(`.${CommonErrorClass}`)
             // const submitter = e.originalEvent?.submitter;
             var formData = new FormData(this);
             if (METHOD == "GET") {
@@ -175,12 +198,25 @@
                             window[LoderFunctionName]("ajaxForm", false);
                         }
 
-                        console.log(res);
-                        Swal.fire({
-                            title: "The Internet?",
-                            icon: "error",
-                            confirmButtonColor: "#0d6efd",
-                        });
+                        // console.log(res);
+                        if (res.status) {
+                            Swal.fire({
+                                title: res.message,
+                                icon: "success",
+                                confirmButtonColor: "#0d6efd",
+                            }).then(function(e) {
+                                if (typeof window[AfterSuccessForm] ===
+                                    "function") {
+                                    window[AfterSuccessForm](res, e);
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: res.message,
+                                icon: "error",
+                                confirmButtonColor: "#0d6efd",
+                            });
+                        }
 
                     },
                     dataType: "json",
@@ -195,6 +231,11 @@
                         var status = xhr.status;
                         if (status == 422) {
                             var error = errorRes?.error;
+                            Object.entries(error).forEach((item, index) => {
+                                const [Key, Value] = item;
+                                $(`.${Key}-error`).html(Value);
+                                console.log(item);
+                            })
                         } else {
                             Swal.fire({
                                 title: errorRes?.message ?? "",

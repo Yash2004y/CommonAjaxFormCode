@@ -26,9 +26,14 @@ class CustomAjaxFormController extends Controller
                 "message" => "invalid input",
                 "error" => $validator->errors(),
                 "status" => false
-            ], 400);
+            ], 422);
         }
 
-        return $request->all();
+        return response()->json([
+            "message" => "Data saved",
+            "status" => true,
+            "data"=>$request->all(),
+            "redirect"=>route('home')
+        ]);
     }
 }
