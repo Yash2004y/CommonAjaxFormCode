@@ -1,0 +1,127 @@
+function setAjaxFormLoder(formClass, state) {
+    // console.log(formClass)
+    var form = $(`.${formClass}`);
+    if (form) {
+        var submitBtn = form.find("button[type='submit']");
+        var oldText = submitBtn.text();
+        var spinner = `
+                <div class="spinner-border" role="status" style="width: 1.3rem;height:1.3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+
+`;
+        spinner = $(spinner);
+        submitBtn.prop("disabled", state);
+        if (state) {
+            submitBtn.append(spinner);
+        } else {
+            submitBtn.children(spinner).remove();
+        }
+    }
+}
+
+function afterSuccessForm(res, swalAction) {
+    //res is response of ajax (when status true and status  code 200)
+    //swalAction is a event obj of swal dismiss
+    // console.log(res, swalAction);
+
+    if (res.redirect && res.redirect != "") {
+        window.location.href = res.redirect;
+    }
+}
+
+$(document).ready(function () {
+    // setLoder("ajaxForm", true);
+    $(".ajaxForm").submit(function (e) {
+        e.preventDefault();
+        const URL = $(this).data("url");
+        const LoderFunctionName =
+            $(this).data("loder-function-name") ?? "setAjaxFormLoder";
+        const METHOD = $(this).prop("method").toUpperCase();
+        const CommonErrorClass = $(this).data("common-error-class");
+        const AfterSuccessForm =
+            $(this).data("after-success-function-name") ?? "afterSuccessForm";
+
+        $(`.${CommonErrorClass}`).html("");
+        // console.log(`.${CommonErrorClass}`)
+        // const submitter = e.originalEvent?.submitter;
+        var formData = new FormData(this);
+        if (METHOD == "GET") {
+            formData = $(this).serialize();
+        }
+        //run loder
+        if (typeof window[LoderFunctionName] === "function") {
+            window[LoderFunctionName]("ajaxForm", true);
+        }
+
+        // Optional: debug log
+        console.log("method =>", METHOD);
+        console.log("Form Data =>");
+        if (METHOD != "GET") {
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+        }
+
+        if (URL && URL != "") {
+            $.ajax({
+                url: URL,
+                data: formData,
+                method: METHOD,
+                success: function (res) {
+                    //stop loder
+                    if (typeof window[LoderFunctionName] === "function") {
+                        window[LoderFunctionName]("ajaxForm", false);
+                    }
+
+                    // console.log(res);
+                    if (res.status) {
+                        Swal.fire({
+                            title: res.message,
+                            icon: "success",
+                            confirmButtonColor: "#0d6efd",
+                        }).then(function (e) {
+                            if (
+                                typeof window[AfterSuccessForm] === "function"
+                            ) {
+                                window[AfterSuccessForm](res, e);
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: res.message,
+                            icon: "error",
+                            confirmButtonColor: "#0d6efd",
+                        });
+                    }
+                },
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                error: function (xhr, status, error) {
+                    //stop loder
+                    if (typeof window[LoderFunctionName] === "function") {
+                        window[LoderFunctionName]("ajaxForm", false);
+                    }
+                    var errorRes = xhr.responseJSON;
+                    var status = xhr.status;
+                    if (status == 422) {
+                        var error = errorRes?.error;
+                        Object.entries(error).forEach((item, index) => {
+                            const [Key, Value] = item;
+                            $(`.${Key}-error`).html(Value);
+                            // console.log(item);
+                        });
+                    } else {
+                        Swal.fire({
+                            title: errorRes?.message ?? "",
+                            icon: "error",
+                            confirmButtonColor: "#0d6efd",
+                        });
+                    }
+                    // console.log(xhr);
+                },
+            });
+        }
+    });
+});

@@ -33,12 +33,13 @@
                             <h5 class="card-title mb-2 p-2" style="border-bottom:3px groove #fcf3cf;">Common Ajax Form
                             </h5>
                             <form class="row p-3 ajaxForm" method="post" data-url="{{ route('store') }}"
-                                data-loder-function-name="setAjaxFormLoder" data-common-error-class="error-common"
-                                data-after-success-function-name="afterSuccessForm">
+                                data-common-error-class="error-common">
+                                {{-- data-loder-function-name="setAjaxFormLoder" --}}
+                                {{-- data-after-success-function-name="afterSuccessForm" --}}
                                 {{-- data-url -> set url where send form data --}}
-                                {{-- data-loder-function-name -> function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
+                                {{-- data-loder-function-name (optional) -> default is setAjaxFormLoder function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
                                 {{-- data-common-error-class -> set class name which available in each error display span or small (use for clear error) --}}
-                                {{-- data-after-success-function-name => function name which is call after response status true and status code 200 it has two argument
+                                {{-- data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument
                                         1. res -> response of ajax
                                         2. swalEventObj => swal dissmiss event obj
                                         ->in this method you set action that perform after submit form or success
@@ -120,139 +121,9 @@
 
 </body>
 
+<script src="{{ asset('ajaxForm.js') }}" lang="text/javascript"></script>
 <script>
-    function setAjaxFormLoder(formClass, state) {
-        // console.log(formClass)
-        var form = $(`.${formClass}`);
-        if (form) {
-            var submitBtn = form.find("button[type='submit']");
-            var oldText = submitBtn.text();
-            var spinner = `
-                    <div class="spinner-border" role="status" style="width: 1.3rem;height:1.3rem;">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
 
-    `;
-            spinner = $(spinner);
-            submitBtn.prop('disabled', state)
-            if (state) {
-                submitBtn.append(spinner);
-            } else {
-                submitBtn.children(spinner).remove()
-            }
-        }
-
-    }
-
-    function afterSuccessForm(res, swalAction) {
-        //res is response of ajax (when status true and status  code 200)
-        //swalAction is a event obj of swal dismiss
-        // console.log(res, swalAction);
-
-        if(res.redirect && res.redirect != ""){
-            window.location.href = res.redirect;
-        }
-    }
-    $(document).ready(function() {
-
-
-        // setLoder("ajaxForm", true);
-        $(".ajaxForm").submit(function(e) {
-            e.preventDefault();
-            const URL = $(this).data("url");
-            const LoderFunctionName = $(this).data('loder-function-name');
-            const METHOD = $(this).prop("method").toUpperCase();
-            const CommonErrorClass = $(this).data("common-error-class");
-            const AfterSuccessForm = $(this).data("after-success-function-name");
-
-            $(`.${CommonErrorClass}`).html("");
-            // console.log(`.${CommonErrorClass}`)
-            // const submitter = e.originalEvent?.submitter;
-            var formData = new FormData(this);
-            if (METHOD == "GET") {
-                formData = $(this).serialize();
-            }
-            //run loder
-            if (typeof window[LoderFunctionName] === "function") {
-                window[LoderFunctionName]("ajaxForm", true);
-            }
-
-
-            // Optional: debug log
-            console.log(METHOD)
-            if (METHOD != "GET") {
-                for (let pair of formData.entries()) {
-                    console.log(pair[0] + ': ' + pair[1]);
-                }
-            }
-
-
-            if (URL && URL != "") {
-                $.ajax({
-                    url: URL,
-                    data: formData,
-                    method: METHOD,
-                    success: function(res) {
-                        //stop loder
-                        if (typeof window[LoderFunctionName] === "function") {
-                            window[LoderFunctionName]("ajaxForm", false);
-                        }
-
-                        // console.log(res);
-                        if (res.status) {
-                            Swal.fire({
-                                title: res.message,
-                                icon: "success",
-                                confirmButtonColor: "#0d6efd",
-                            }).then(function(e) {
-                                if (typeof window[AfterSuccessForm] ===
-                                    "function") {
-                                    window[AfterSuccessForm](res, e);
-                                }
-                            });
-                        } else {
-                            Swal.fire({
-                                title: res.message,
-                                icon: "error",
-                                confirmButtonColor: "#0d6efd",
-                            });
-                        }
-
-                    },
-                    dataType: "json",
-                    processData: false,
-                    contentType: false,
-                    error: function(xhr, status, error) {
-                        //stop loder
-                        if (typeof window[LoderFunctionName] === "function") {
-                            window[LoderFunctionName]("ajaxForm", false);
-                        }
-                        var errorRes = xhr.responseJSON;
-                        var status = xhr.status;
-                        if (status == 422) {
-                            var error = errorRes?.error;
-                            Object.entries(error).forEach((item, index) => {
-                                const [Key, Value] = item;
-                                $(`.${Key}-error`).html(Value);
-                                console.log(item);
-                            })
-                        } else {
-                            Swal.fire({
-                                title: errorRes?.message ?? "",
-                                icon: "error",
-                                confirmButtonColor: "#0d6efd",
-                            });
-                        }
-                        // console.log(xhr);
-                    }
-
-                });
-            }
-
-        })
-
-
-    })
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
