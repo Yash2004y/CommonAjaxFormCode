@@ -1,6 +1,5 @@
-function setAjaxFormLoder(formClass, state) {
+function setAjaxFormLoder(form, state) {
     // console.log(formClass)
-    var form = $(`.${formClass}`);
     if (form) {
         var submitBtn = form.find("button[type='submit']");
         var oldText = submitBtn.text();
@@ -31,8 +30,8 @@ function afterSuccessForm(res, swalAction) {
 }
 
 $(document).ready(function () {
-    // setLoder("ajaxForm", true);
-    $(".ajaxForm").submit(function (e) {
+    // setLoder(form, true);
+    $(document).on("submit", ".ajaxForm", function (e) {
         e.preventDefault();
         const URL = $(this).data("url");
         const form = $(this);
@@ -52,7 +51,7 @@ $(document).ready(function () {
         }
         //run loder
         if (typeof window[LoderFunctionName] === "function") {
-            window[LoderFunctionName]("ajaxForm", true);
+            window[LoderFunctionName](form, true);
         }
 
         // Optional: debug log
@@ -72,7 +71,7 @@ $(document).ready(function () {
                 success: function (res) {
                     //stop loder
                     if (typeof window[LoderFunctionName] === "function") {
-                        window[LoderFunctionName]("ajaxForm", false);
+                        window[LoderFunctionName](form, false);
                     }
 
                     // console.log(res);
@@ -102,7 +101,7 @@ $(document).ready(function () {
                 error: function (xhr, status, error) {
                     //stop loder
                     if (typeof window[LoderFunctionName] === "function") {
-                        window[LoderFunctionName]("ajaxForm", false);
+                        window[LoderFunctionName](form, false);
                     }
                     var errorRes = xhr.responseJSON;
                     var status = xhr.status;

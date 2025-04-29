@@ -30,8 +30,12 @@
                     <div class="card"
                         style="background: #f5b7b1;box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
                         <div class="card-body p-0">
-                            <h5 class="card-title mb-2 p-2" style="border-bottom:3px groove #fcf3cf;">Common Ajax Form
-                            </h5>
+                            <div class="mb-2 p-2 d-flex flex-col justify-content-between" style="border-bottom:3px groove #fcf3cf;">
+                                <h5 class="card-title">Common Ajax Form
+                                </h5>
+                                <a href="{{ route('list') }}" class="btn btn-primary btn-sm">List</a>
+
+                            </div>
                             <form class="row p-3 ajaxForm" method="post" data-url="{{ route('store') }}"
                                 data-common-error-class="error-common">
                                 {{-- data-loder-function-name="setAjaxFormLoder" --}}
