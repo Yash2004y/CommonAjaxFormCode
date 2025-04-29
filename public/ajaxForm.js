@@ -35,6 +35,7 @@ $(document).ready(function () {
     $(".ajaxForm").submit(function (e) {
         e.preventDefault();
         const URL = $(this).data("url");
+        const form = $(this);
         const LoderFunctionName =
             $(this).data("loder-function-name") ?? "setAjaxFormLoder";
         const METHOD = $(this).prop("method").toUpperCase();
@@ -42,7 +43,7 @@ $(document).ready(function () {
         const AfterSuccessForm =
             $(this).data("after-success-function-name") ?? "afterSuccessForm";
 
-        $(`.${CommonErrorClass}`).html("");
+        form.find(`.${CommonErrorClass}`).html("");
         // console.log(`.${CommonErrorClass}`)
         // const submitter = e.originalEvent?.submitter;
         var formData = new FormData(this);
@@ -109,7 +110,7 @@ $(document).ready(function () {
                         var error = errorRes?.error;
                         Object.entries(error).forEach((item, index) => {
                             const [Key, Value] = item;
-                            $(`.${Key}-error`).html(Value);
+                            form.find(`.${Key}-error`).html(Value);
                             // console.log(item);
                         });
                     } else {

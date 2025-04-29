@@ -44,6 +44,9 @@
                                         2. swalEventObj => swal dissmiss event obj
                                         ->in this method you set action that perform after submit form or success
                                 --}}
+                                {{--
+                                    data-common-error-class this class and error class must be inside form tag
+                                --}}
                                 @csrf
                                 <div class="col-md-6">
                                     <label for="inputEmail4" class="form-label">Email</label>
@@ -78,7 +81,7 @@
                                 <div class="col-md-4">
                                     <label for="inputState" class="form-label">State</label>
                                     <select id="inputState" name="state" class="form-select">
-                                        <option selected>Choose...</option>
+                                        <option selected value="">Choose...</option>
                                         <option>Gujrat</option>
                                         <option>Mharastra</option>
                                         <option>Rajsthan</option>
@@ -122,9 +125,7 @@
 </body>
 
 <script src="{{ asset('ajaxForm.js') }}" lang="text/javascript"></script>
-<script>
-
-</script>
+<script></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
 </script>
