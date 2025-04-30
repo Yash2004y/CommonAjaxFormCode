@@ -33,7 +33,7 @@ $(document).ready(function () {
     // setLoder(form, true);
     $(document).on("submit", ".ajaxForm", function (e) {
         e.preventDefault();
-        const URL = $(this).data("url");
+        const URL = $(this).prop("action");
         const form = $(this);
         const LoderFunctionName =
             $(this).data("loder-function-name") ?? "setAjaxFormLoder";

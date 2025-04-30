@@ -1,0 +1,43 @@
+let ModalAjaxCall = null;
+$(document).ready(function () {
+    $(document).on("click", ".modalOpen", function (e) {
+        const btn = $(this);
+        const ModalUrl = btn.data("modal-url");
+        const DataId = btn.data("id");
+        const data = {
+            id: DataId,
+        };
+        if (ModalUrl && ModalUrl != "") {
+            if (ModalAjaxCall != null) ModalAjaxCall.abort();
+            ModalAjaxCall = $.ajax({
+                url: ModalUrl,
+                data: data,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                method: "POST",
+                success: function (res) {
+                    // console.log();
+                    if (res.status) {
+                        $(".ajaxModal").remove();
+                        $("body").append(res.modal);
+                        $(".ajaxModal").modal("show");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    var errorRes = xhr.responseJSON;
+                    var status = xhr.status;
+                    if (errorRes) {
+                        Swal.fire({
+                            title: errorRes?.message ?? "",
+                            icon: "error",
+                            confirmButtonColor: "#0d6efd",
+                        });
+                    }
+                },
+            });
+        }
+    });
+});

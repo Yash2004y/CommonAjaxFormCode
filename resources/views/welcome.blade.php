@@ -30,17 +30,17 @@
                     <div class="card"
                         style="background: #f5b7b1;box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
                         <div class="card-body p-0">
-                            <div class="mb-2 p-2 d-flex flex-col justify-content-between" style="border-bottom:3px groove #fcf3cf;">
+                            <div class="mb-2 p-2 d-flex flex-col justify-content-between"
+                                style="border-bottom:3px groove #fcf3cf;">
                                 <h5 class="card-title">Common Ajax Form
                                 </h5>
                                 <a href="{{ route('list') }}" class="btn btn-primary btn-sm">List</a>
 
                             </div>
-                            <form class="row p-3 ajaxForm" method="post" data-url="{{ route('store') }}"
+                            <form class="row p-3 ajaxForm" method="post" action="{{ route('store') }}"
                                 data-common-error-class="error-common">
                                 {{-- data-loder-function-name="setAjaxFormLoder" --}}
                                 {{-- data-after-success-function-name="afterSuccessForm" --}}
-                                {{-- data-url -> set url where send form data --}}
                                 {{-- data-loder-function-name (optional) -> default is setAjaxFormLoder function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
                                 {{-- data-common-error-class -> set class name which available in each error display span or small (use for clear error) --}}
                                 {{-- data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument

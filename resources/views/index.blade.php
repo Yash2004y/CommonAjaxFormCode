@@ -4,13 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>Common Ajax Form Code</title>
     <style>
         * {
@@ -43,7 +44,7 @@
                                 <h5 class="card-title">Common Ajax Modal
                                 </h5>
                                 <div>
-                                    <button class="btn btn-primary btn-sm modelOpen"
+                                    <button class="btn btn-primary btn-sm modalOpen"
                                         data-modal-url="{{ route('modalOpen') }}">Add</button>
                                     <a href="{{ route('home') }}" class="btn btn-primary btn-sm">Ajax Form Code</a>
 
@@ -63,7 +64,11 @@
                                                 <td>{{ $u->id }}</td>
                                                 <td>{{ $u->name }}</td>
                                                 <td>{{ $u->email }}</td>
-                                                <td>Action</td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-sm modalOpen"
+                                                        data-modal-url="{{ route('modalOpen') }}"
+                                                        data-id="{{ $u->id }}">Edit</button>
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
@@ -97,46 +102,9 @@
 </script>
 
 <script src="{{ asset('ajaxForm.js') }}" lang="text/javascript"></script>
+<script src="{{ asset('ajaxModal.js') }}" lang="text/javascript"></script>
 
-<script>
-    $(document).ready(function() {
-        $(document).on("click", ".modelOpen", function(e) {
-            const btn = $(this);
-            const ModalUrl = btn.data("modal-url");
-            const DataId = btn.data("id");
-            const data = {
-                id: DataId,
-            };
-            if (ModalUrl && ModalUrl != "") {
-                $.ajax({
-                    url: ModalUrl,
-                    data: data,
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    method: "POST",
-                    success: function(res) {
-                        // console.log();
-                        if (res.status) {
-                            $(".ajaxModal").remove();
-                            $("body").append(res.modal);
-                            $(".ajaxModal").modal("show");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        var errorRes = xhr.responseJSON;
-                        var status = xhr.status;
-                        Swal.fire({
-                            title: errorRes?.message ?? "",
-                            icon: "error",
-                            confirmButtonColor: "#0d6efd",
-                        });
-                    },
-                });
-            }
-        });
-    })
-</script>
+
 
 
 </html>

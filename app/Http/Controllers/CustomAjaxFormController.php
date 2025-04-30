@@ -47,22 +47,65 @@ class CustomAjaxFormController extends Controller
 
     public function modalOpen(Request $request)
     {
-        try{
+        try {
             $id = $request->input('id');
             $user = User::find($id);
-            $modal = view('userModal',compact('user'))->render();
+            $modal = view('userModal', compact('user'))->render();
 
             return response()->json([
-                "modal"=>$modal,
-                "status"=>true,
-                "message"=>"modal html"
+                "modal" => $modal,
+                "status" => true,
+                "message" => "modal html"
             ]);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
-                "message"=>$e->getMessage(),
-                "status"=>false,
-            ],500);
+                "message" => $e->getMessage(),
+                "status" => false,
+            ], 500);
         }
+    }
 
+    public function UserStore(Request $request, $id = null)
+    {
+        try {
+
+            // return $id;
+            $data = $request->all();
+            $rules = [
+                "name" => "required",
+                "email" => "required|email|unique:users,email,".$id,
+            ];
+            if (empty($id)) {
+                $rules["password"] = "required";
+                $rules["password_confirmation"] = "required";
+            } else {
+                $rules["password"] = "confirmed";
+            }
+            $validator = Validator::make($data, $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    "error" => $validator->errors(),
+                    "message" => "Invalid Input",
+                    "status" => false,
+                ], 422);
+            }
+
+            if (!empty($id)) {
+                unset($data['password']);
+            }
+            $user = User::updateOrCreate(["id" => $id], $data);
+
+            return response()->json([
+                "message" => "User " . (empty($id) ? "Added" : "Updated"),
+                "status" => true,
+                "data" => $user,
+                "redirect" => route('list')
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => $e->getMessage(),
+                "status" => false,
+            ], 500);
+        }
     }
 }
