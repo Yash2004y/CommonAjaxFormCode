@@ -2,11 +2,16 @@ function setAjaxFormLoder(submitBtn, state) {
     // var submitBtn = ;
     if (submitBtn) {
         var spinner = `
-                <div class="spinner-border" role="status" style="width: 1.3rem;height:1.3rem;">
+                <div class="spinner-border" role="status" style="width: ${
+                    submitBtn.innerHeight() - 11
+                }px;height:${submitBtn.innerHeight() - 11}px;">
                     <span class="visually-hidden">Loading...</span>
                 </div>
 
                 `;
+        if (!submitBtn.hasClass("d-inline-flex align-items-center gap-3")) {
+            submitBtn.addClass("d-inline-flex align-items-center gap-3");
+        }
         spinner = $(spinner);
         submitBtn.prop("disabled", state);
         if (state) {
@@ -26,6 +31,7 @@ function afterSuccessForm(res, swalAction) {
         window.location.href = res.redirect;
     }
 }
+// setAjaxFormLoder($("button[type='submit']"), true);
 
 $(document).ready(function () {
     $(document).on("submit", ".ajaxForm", function (e) {

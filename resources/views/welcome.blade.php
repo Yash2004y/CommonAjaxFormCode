@@ -110,9 +110,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12 mt-2">
-                                    <button type="submit"
-                                        class="btn btn-primary d-flex align-content-center align-items-center gap-3"
-                                        style="vertical-align:middle;">Submit
+                                    <button type="submit" class="btn btn-primary">Submit
 
                                     </button>
                                 </div>
