@@ -1,14 +1,12 @@
-function setAjaxFormLoder(form, state) {
-    // console.log(formClass)
-    if (form) {
-        var submitBtn = form.find("button[type='submit']");
-        var oldText = submitBtn.text();
+function setAjaxFormLoder(submitBtn, state) {
+    // var submitBtn = ;
+    if (submitBtn) {
         var spinner = `
                 <div class="spinner-border" role="status" style="width: 1.3rem;height:1.3rem;">
                     <span class="visually-hidden">Loading...</span>
                 </div>
 
-`;
+                `;
         spinner = $(spinner);
         submitBtn.prop("disabled", state);
         if (state) {
@@ -30,11 +28,11 @@ function afterSuccessForm(res, swalAction) {
 }
 
 $(document).ready(function () {
-    // setLoder(form, true);
     $(document).on("submit", ".ajaxForm", function (e) {
         e.preventDefault();
         const URL = $(this).prop("action");
         const form = $(this);
+        const submitBtn = form.find("button[type='submit']");
         const LoderFunctionName =
             $(this).data("loder-function-name") ?? "setAjaxFormLoder";
         const METHOD = $(this).prop("method").toUpperCase();
@@ -51,7 +49,7 @@ $(document).ready(function () {
         }
         //run loder
         if (typeof window[LoderFunctionName] === "function") {
-            window[LoderFunctionName](form, true);
+            window[LoderFunctionName](submitBtn, true);
         }
 
         // Optional: debug log
@@ -71,7 +69,7 @@ $(document).ready(function () {
                 success: function (res) {
                     //stop loder
                     if (typeof window[LoderFunctionName] === "function") {
-                        window[LoderFunctionName](form, false);
+                        window[LoderFunctionName](submitBtn, false);
                     }
 
                     // console.log(res);
@@ -101,7 +99,7 @@ $(document).ready(function () {
                 error: function (xhr, status, error) {
                     //stop loder
                     if (typeof window[LoderFunctionName] === "function") {
-                        window[LoderFunctionName](form, false);
+                        window[LoderFunctionName](submitBtn, false);
                     }
                     var errorRes = xhr.responseJSON;
                     var status = xhr.status;
