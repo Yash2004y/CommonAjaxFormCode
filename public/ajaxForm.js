@@ -1,27 +1,3 @@
-function setAjaxFormLoder(submitBtn, state) {
-    // var submitBtn = ;
-    if (submitBtn) {
-        var spinner = `
-                <div class="spinner-border" role="status" style="width: ${
-                    submitBtn.innerHeight() - 11
-                }px;height:${submitBtn.innerHeight() - 11}px;">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-
-                `;
-        if (!submitBtn.hasClass("d-inline-flex align-items-center gap-3")) {
-            submitBtn.addClass("d-inline-flex align-items-center gap-3");
-        }
-        spinner = $(spinner);
-        submitBtn.prop("disabled", state);
-        if (state) {
-            submitBtn.append(spinner);
-        } else {
-            submitBtn.children(spinner).remove();
-        }
-    }
-}
-
 function afterSuccessForm(res, swalAction) {
     //res is response of ajax (when status true and status  code 200)
     //swalAction is a event obj of swal dismiss
@@ -31,7 +7,7 @@ function afterSuccessForm(res, swalAction) {
         window.location.href = res.redirect;
     }
 }
-// setAjaxFormLoder($("button[type='submit']"), true);
+// setAjaxBtnLoader($("button[type='submit']"), true);
 
 $(document).ready(function () {
     $(document).on("submit", ".ajaxForm", function (e) {
@@ -40,7 +16,7 @@ $(document).ready(function () {
         const form = $(this);
         const submitBtn = form.find("button[type='submit']");
         const LoderFunctionName =
-            $(this).data("loder-function-name") ?? "setAjaxFormLoder";
+            $(this).data("loder-function-name") ?? "setAjaxBtnLoader";
         const METHOD = $(this).prop("method").toUpperCase();
         const CommonErrorClass = $(this).data("common-error-class");
         const AfterSuccessForm =
@@ -80,22 +56,21 @@ $(document).ready(function () {
 
                     // console.log(res);
                     if (res.status) {
-                        Swal.fire({
+                        swalMessage({
                             title: res.message,
-                            icon: "success",
-                            confirmButtonColor: "#0d6efd",
-                        }).then(function (e) {
-                            if (
-                                typeof window[AfterSuccessForm] === "function"
-                            ) {
-                                window[AfterSuccessForm](res, e);
-                            }
+                            action: (e) => {
+                                if (
+                                    typeof window[AfterSuccessForm] ===
+                                    "function"
+                                ) {
+                                    window[AfterSuccessForm](res, e);
+                                }
+                            },
                         });
                     } else {
-                        Swal.fire({
+                        swalMessage({
                             title: res.message,
                             icon: "error",
-                            confirmButtonColor: "#0d6efd",
                         });
                     }
                 },
@@ -117,13 +92,11 @@ $(document).ready(function () {
                             // console.log(item);
                         });
                     } else {
-                        Swal.fire({
+                        swalMessage({
                             title: errorRes?.message ?? "",
                             icon: "error",
-                            confirmButtonColor: "#0d6efd",
                         });
                     }
-                    // console.log(xhr);
                 },
             });
         }

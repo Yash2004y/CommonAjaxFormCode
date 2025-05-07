@@ -7,10 +7,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Common Ajax Form Code</title>
     <style>
         * {
@@ -39,9 +35,9 @@
                             </div>
                             <form class="row p-3 ajaxForm" method="post" action="{{ route('store') }}"
                                 data-common-error-class="error-common">
-                                {{-- data-loder-function-name="setAjaxFormLoder" --}}
+                                {{-- data-loder-function-name="setAjaxBtnLoader" --}}
                                 {{-- data-after-success-function-name="afterSuccessForm" --}}
-                                {{-- data-loder-function-name (optional) -> default is setAjaxFormLoder function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
+                                {{-- data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
                                 {{-- data-common-error-class -> set class name which available in each error display span or small (use for clear error) --}}
                                 {{-- data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument
                                         1. res -> response of ajax
@@ -126,8 +122,6 @@
 
 </body>
 
-<script src="{{ asset('ajaxForm.js') }}" lang="text/javascript"></script>
-<script></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous">
 </script>
@@ -137,7 +131,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"
     integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous">
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+<script src="{{ asset('utils.js') }}" lang="text/javascript"></script>
+<script src="{{ asset('ajaxForm.js') }}" lang="text/javascript"></script>
 
 </html>

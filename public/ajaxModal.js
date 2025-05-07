@@ -1,27 +1,4 @@
 let ModalAjaxCall = null;
-function setAjaxModalLoder(submitBtn, state) {
-    // var submitBtn = ;
-    if (submitBtn) {
-        var spinner = `
-                <div class="spinner-border" role="status" style="width: ${
-                    submitBtn.innerHeight() - 11
-                }px;height:${submitBtn.innerHeight() - 11}px;">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-
-                `;
-        if (!submitBtn.hasClass("d-inline-flex align-items-center gap-3")) {
-            submitBtn.addClass("d-inline-flex align-items-center gap-3");
-        }
-        spinner = $(spinner);
-        submitBtn.prop("disabled", state);
-        if (state) {
-            submitBtn.append(spinner);
-        } else {
-            submitBtn.children(spinner).remove();
-        }
-    }
-}
 
 $(document).ready(function () {
     $(document).on("click", ".modalOpen", function (e) {
@@ -33,7 +10,7 @@ $(document).ready(function () {
         };
         if (ModalUrl && ModalUrl != "") {
             if (ModalAjaxCall != null) ModalAjaxCall.abort();
-            setAjaxModalLoder(btn, true);
+            setAjaxBtnLoader(btn, true);
             ModalAjaxCall = $.ajax({
                 url: ModalUrl,
                 data: data,
@@ -44,7 +21,7 @@ $(document).ready(function () {
                 },
                 method: "POST",
                 success: function (res) {
-                    setAjaxModalLoder(btn, false);
+                    setAjaxBtnLoader(btn, false);
 
                     // console.log();
                     if (res.status) {
@@ -54,15 +31,14 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr, status, error) {
-                    setAjaxModalLoder(btn, false);
+                    setAjaxBtnLoader(btn, false);
 
                     var errorRes = xhr.responseJSON;
                     var status = xhr.status;
                     if (errorRes) {
-                        Swal.fire({
+                        swalMessage({
                             title: errorRes?.message ?? "",
                             icon: "error",
-                            confirmButtonColor: "#0d6efd",
                         });
                     }
                 },
