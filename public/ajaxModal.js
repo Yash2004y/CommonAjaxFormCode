@@ -55,8 +55,19 @@ $(document).ready(function () {
     });
 });
 
-
 //documentation
 
 /* data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form */
 
+/*
+    data-id (optional)=>use for give id parameter to route action method
+*/
+
+/*
+    data-modal-url = url which give html code in response following response required with http code 200
+    {
+        "modal": "html code",
+        "status" : true or false
+        "message": "message optional"
+    }
+*/
