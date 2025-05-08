@@ -5,12 +5,16 @@ $(document).ready(function () {
         const btn = $(this);
         const ModalUrl = btn.data("modal-url");
         const DataId = btn.data("id");
+        const LoderFunctionName =
+            $(this).data("loder-function-name") ?? "setAjaxBtnLoader";
         const data = {
             id: DataId,
         };
         if (ModalUrl && ModalUrl != "") {
             if (ModalAjaxCall != null) ModalAjaxCall.abort();
-            setAjaxBtnLoader(btn, true);
+            if (typeof window[LoderFunctionName] === "function") {
+                window[LoderFunctionName](btn, true);
+            }
             ModalAjaxCall = $.ajax({
                 url: ModalUrl,
                 data: data,
@@ -21,7 +25,9 @@ $(document).ready(function () {
                 },
                 method: "POST",
                 success: function (res) {
-                    setAjaxBtnLoader(btn, false);
+                    if (typeof window[LoderFunctionName] === "function") {
+                        window[LoderFunctionName](btn, false);
+                    }
 
                     // console.log();
                     if (res.status) {
@@ -31,7 +37,9 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr, status, error) {
-                    setAjaxBtnLoader(btn, false);
+                    if (typeof window[LoderFunctionName] === "function") {
+                        window[LoderFunctionName](btn, false);
+                    }
 
                     var errorRes = xhr.responseJSON;
                     var status = xhr.status;
@@ -46,3 +54,9 @@ $(document).ready(function () {
         }
     });
 });
+
+
+//documentation
+
+/* data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form */
+

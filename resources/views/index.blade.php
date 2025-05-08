@@ -64,6 +64,8 @@
                                                     <button class="btn btn-primary btn-sm modalOpen"
                                                         data-modal-url="{{ route('modalOpen') }}"
                                                         data-id="{{ $u->id }}">Edit</button>
+                                                    {{-- data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
+
                                                 </td>
                                             </tr>
                                         @empty
