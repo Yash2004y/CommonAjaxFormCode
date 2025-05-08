@@ -34,19 +34,25 @@
 
                             </div>
                             <form class="row p-3 ajaxForm" method="post" action="{{ route('store') }}"
-                                data-common-error-class="error-common">
+                                data-before-ajax-call-function="beforeAjax">
                                 {{-- data-loder-function-name="setAjaxBtnLoader" --}}
                                 {{-- data-after-success-function-name="afterSuccessForm" --}}
+                                {{-- data-before-ajax-call-function (optional) -> function name which is call before call ajax this method which must return boolean value. this method has following two parameter
+                                    1.form => object of form
+                                    2.formData => formData object base on form method
+                                --}}
                                 {{-- data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
-                                {{-- data-common-error-class -> set class name which available in each error display span or small (use for clear error) --}}
+                                {{-- data-common-error-class (optional) -> default is error-common class. set class name which available in each error display span or small (use for clear error) --}}
                                 {{-- data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument
                                         1. res -> response of ajax
                                         2. swalEventObj => swal dissmiss event obj
                                         ->in this method you set action that perform after submit form or success
+
                                 --}}
                                 {{--
                                     data-common-error-class this class and error class must be inside form tag
                                 --}}
+                                {{-- ->all override method defind after utils.js --}}
                                 @csrf
                                 <div class="col-md-6">
                                     <label for="inputEmail4" class="form-label">Email</label>
@@ -138,6 +144,12 @@
 
 
 <script src="{{ asset('utils.js') }}" lang="text/javascript"></script>
+<script>
+    function beforeAjax(form, formData) {
+        console.log(formData);
+        return true;
+    }
+</script>
 <script src="{{ asset('ajaxForm.js') }}" lang="text/javascript"></script>
 
 </html>

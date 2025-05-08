@@ -17,8 +17,10 @@ $(document).ready(function () {
         const submitBtn = form.find("button[type='submit']");
         const LoderFunctionName =
             $(this).data("loder-function-name") ?? "setAjaxBtnLoader";
-        const METHOD = $(this).prop("method").toUpperCase();
-        const CommonErrorClass = $(this).data("common-error-class");
+        const BeforeAjaxCall = $(this).data("before-ajax-call-function");
+        const METHOD = $(this).prop("method").toUpperCase() ?? "GET";
+        const CommonErrorClass =
+            $(this).data("common-error-class") ?? "error-common";
         const AfterSuccessForm =
             $(this).data("after-success-function-name") ?? "afterSuccessForm";
 
@@ -29,11 +31,6 @@ $(document).ready(function () {
         if (METHOD == "GET") {
             formData = $(this).serialize();
         }
-        //run loder
-        if (typeof window[LoderFunctionName] === "function") {
-            window[LoderFunctionName](submitBtn, true);
-        }
-
         // Optional: debug log
         console.log("method =>", METHOD);
         console.log("Form Data =>");
@@ -43,7 +40,17 @@ $(document).ready(function () {
             }
         }
 
+        flag = true;
+        if (typeof window[BeforeAjaxCall] === "function") {
+            flag = window[BeforeAjaxCall](form, formData) ?? true;
+        }
+        if (!flag) return;
+
         if (URL && URL != "") {
+            //run loder
+            if (typeof window[LoderFunctionName] === "function") {
+                window[LoderFunctionName](submitBtn, true);
+            }
             $.ajax({
                 url: URL,
                 data: formData,
@@ -102,3 +109,23 @@ $(document).ready(function () {
         }
     });
 });
+
+//documentation
+
+/* data-before-ajax-call-function (optional) -> function name which is call before call ajax this method which must return boolean value. this method has following two parameter
+    1.form => object of form
+    2.formData => formData object base on form method
+*/
+/* data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form */
+
+/*data-common-error-class (optional) -> default is error - common class. set class name which available in each error display span or small(use for clear error)*/
+
+/* data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument
+        1. res -> response of ajax
+        2. swalEventObj => swal dissmiss event obj
+        ->in this method you set action that perform after submit form or success
+*/
+
+// data-common-error-class this class and error class must be inside form tag
+
+//all override method defind after utils.js
