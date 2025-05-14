@@ -64,6 +64,32 @@ class CustomAjaxFormController extends Controller
             ], 500);
         }
     }
+    public function deleteUser(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $user = User::find($id);
+            if (empty($user)) {
+                return response()->json([
+                    "message" => "User not found",
+                    "status" => false,
+                ], 404);
+            }
+            $user->delete();
+            return response()->json([
+                "status" => true,
+                "message" => "User deleted successfully.",
+                "redirect" => route('list')
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => $e->getMessage(),
+                "status" => false,
+            ], 500);
+        }
+    }
+
+
 
     public function UserStore(Request $request, $id = null)
     {
@@ -73,7 +99,7 @@ class CustomAjaxFormController extends Controller
             $data = $request->all();
             $rules = [
                 "name" => "required",
-                "email" => "required|email|unique:users,email,".$id,
+                "email" => "required|email|unique:users,email," . $id,
             ];
             if (empty($id)) {
                 $rules["password"] = "required";

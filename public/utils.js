@@ -12,7 +12,7 @@ function swalMessage(obj) {
         title: obj.title,
         text: obj?.text ?? "",
         icon: obj?.icon ?? "success",
-        confirmButtonColor: obj.confirmButtonColor,
+        confirmButtonColor: obj?.confirmButtonColor ?? "#3085d6",
         allowOutsideClick: false, // prevent click outside
         allowEscapeKey: false, // prevent ESC key
         allowEnterKey: true, // allow Enter key to confirm
@@ -34,7 +34,19 @@ swalMessage({
     }
 });
 */
-
+function swalConfirmMessage(obj) {
+    Swal.fire({
+        title: obj.title,
+        text: obj.text,
+        icon: obj?.icon ?? "warning",
+        showCancelButton: obj?.showCancelButton ?? true,
+        confirmButtonColor: obj?.confirmButtonColor ?? "#3085d6",
+        cancelButtonColor: obj?.cancelButtonColor ?? "#d33",
+        confirmButtonText: obj?.confirmButtonText ?? "Yes, delete it!",
+    }).then((result) => {
+        if (typeof obj.action == "function") obj.action(result);
+    });
+}
 function setAjaxBtnLoader(submitBtn, state) {
     // var submitBtn = ;
     if (submitBtn) {

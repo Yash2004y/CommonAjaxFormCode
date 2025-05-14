@@ -123,7 +123,7 @@ $(document).ready(function () {
 /* data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument
         1. res -> response of ajax
         2. swalEventObj => swal dissmiss event obj
-        ->in this method you set action that perform after submit form or success
+        ->in this method you set action that perform after  success
 */
 
 // data-common-error-class this class and error class must be inside form tag
