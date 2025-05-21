@@ -44,6 +44,15 @@ class CustomAjaxFormController extends Controller
         $users = User::all();
         return view('index', compact('users'));
     }
+    public function list2(Request $request)
+    {
+        $perPage = $request->input("perPage", 15);
+        $users = User::paginate($perPage);
+        if ($request->ajax()) {
+            return view('partialPageData', compact('users'));
+        }
+        return view('indexwithpagination', compact('users'));
+    }
 
     public function modalOpen(Request $request)
     {

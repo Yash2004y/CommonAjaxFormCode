@@ -144,6 +144,8 @@
 
 
 <script src="{{ asset('utils.js') }}" lang="text/javascript"></script>
+{{-- you can write your custom function after utils.js --}}
+
 <script>
     function beforeAjax(form, formData) {
         console.log(formData);

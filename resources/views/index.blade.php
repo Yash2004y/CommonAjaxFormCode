@@ -43,6 +43,8 @@
                                     <button class="btn btn-primary btn-sm modalOpen"
                                         data-modal-url="{{ route('modalOpen') }}">Add</button>
                                     <a href="{{ route('home') }}" class="btn btn-primary btn-sm">Ajax Form Code</a>
+                                    <a href="{{ route('listwithpagination') }}" class="btn btn-primary btn-sm">List with
+                                        pagination</a>
 
                                 </div>
                             </div>
@@ -72,7 +74,7 @@
                                                         data-id="{{ $u->id }}"
                                                         data-method="POST">Delete</button>
 
-                                                        {{--for delete btn (item-delete-btn class)}}
+                                                    {{-- for delete btn (item-delete-btn class)}}
                                                     {{-- data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
 
                                                     {{--
@@ -125,6 +127,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="{{ asset('utils.js') }}" lang="text/javascript"></script>
+
+{{-- you can write your custom function after utils.js --}}
 <script src="{{ asset('ajaxDelete.js') }}" lang="text/javascript"></script>
 
 <script src="{{ asset('ajaxForm.js') }}" lang="text/javascript"></script>
