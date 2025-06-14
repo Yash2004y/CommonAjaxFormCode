@@ -45,7 +45,8 @@ $(document).ready(function () {
                     var status = xhr.status;
                     if (errorRes) {
                         swalMessage({
-                            title: errorRes?.message ?? "",
+                            title: "Error",
+                            text: errorRes?.message ?? "",
                             icon: "error",
                         });
                     }

@@ -64,19 +64,18 @@ $(document).ready(function () {
                     // console.log(res);
                     if (res.status) {
                         swalMessage({
-                            title: res.message,
+                            title: "Success",
+                            text: res.message,
                             action: (e) => {
-                                if (
-                                    typeof window[AfterSuccessForm] ===
-                                    "function"
-                                ) {
+                                if (typeof window[AfterSuccessForm] === "function") {
                                     window[AfterSuccessForm](res, e);
                                 }
                             },
                         });
                     } else {
                         swalMessage({
-                            title: res.message,
+                            text: res.message,
+                            title: "Error",
                             icon: "error",
                         });
                     }
@@ -100,7 +99,8 @@ $(document).ready(function () {
                         });
                     } else {
                         swalMessage({
-                            title: errorRes?.message ?? "",
+                            title: "Error",
+                            text: errorRes?.message ?? "",
                             icon: "error",
                         });
                     }

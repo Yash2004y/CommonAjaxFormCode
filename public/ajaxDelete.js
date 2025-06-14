@@ -42,37 +42,25 @@ $(document).ready(function () {
                             },
                             method: Method,
                             success: function (res) {
-                                if (
-                                    typeof window[LoderFunctionName] ===
-                                    "function"
-                                ) {
+                                if (typeof window[LoderFunctionName] ==="function") {
                                     window[LoderFunctionName](btn, false);
                                 }
 
                                 // console.log();
                                 if (res.status) {
                                     swalMessage({
-                                        title: res.message,
+                                        title: "Success",
+                                        text: res.message,
                                         action: (e) => {
-                                            if (
-                                                typeof window[
-                                                    afterDeleteActionMethod
-                                                ] === "function"
-                                            ) {
-                                                window[afterDeleteActionMethod](
-                                                    res,
-                                                    e
-                                                );
+                                            if (typeof window[afterDeleteActionMethod] === "function") {
+                                                window[afterDeleteActionMethod](res,e);
                                             }
                                         },
                                     });
                                 }
                             },
                             error: function (xhr, status, error) {
-                                if (
-                                    typeof window[LoderFunctionName] ===
-                                    "function"
-                                ) {
+                                if (typeof window[LoderFunctionName] ==="function") {
                                     window[LoderFunctionName](btn, false);
                                 }
 
@@ -80,7 +68,8 @@ $(document).ready(function () {
                                 var status = xhr.status;
                                 if (errorRes) {
                                     swalMessage({
-                                        title: errorRes?.message ?? "",
+                                        title:"Error",
+                                        text: errorRes?.message ?? "",
                                         icon: "error",
                                     });
                                 }
