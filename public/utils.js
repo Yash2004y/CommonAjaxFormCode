@@ -48,7 +48,7 @@ function swalConfirmMessage(obj) {
     });
 }
 function setAjaxBtnLoader(submitBtn, state) {
-    // var submitBtn = ;
+        var ButtonClass = "d-inline-flex justify-content-center align-items-center gap-3";
     if (submitBtn) {
         var spinner = `
                 <div class="spinner-border" role="status" style="width: ${
@@ -58,15 +58,16 @@ function setAjaxBtnLoader(submitBtn, state) {
                 </div>
 
                 `;
-        if (!submitBtn.hasClass("d-inline-flex justify-content-center align-items-center gap-3")) {
-            submitBtn.addClass("d-inline-flex justify-content-center align-items-center gap-3");
+        if (!submitBtn.hasClass(ButtonClass)) {
+            submitBtn.addClass(ButtonClass);
         }
         spinner = $(spinner);
         submitBtn.prop("disabled", state);
         if (state) {
             submitBtn.append(spinner);
         } else {
-            submitBtn.children(spinner).remove();
+            submitBtn.removeClass(ButtonClass);
+            submitBtn.find('.spinner-border').remove();
         }
     }
 }
