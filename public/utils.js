@@ -58,8 +58,8 @@ function setAjaxBtnLoader(submitBtn, state) {
                 </div>
 
                 `;
-        if (!submitBtn.hasClass("d-inline-flex align-items-center gap-3")) {
-            submitBtn.addClass("d-inline-flex align-items-center gap-3");
+        if (!submitBtn.hasClass("d-inline-flex justify-content-center align-items-center gap-3")) {
+            submitBtn.addClass("d-inline-flex justify-content-center align-items-center gap-3");
         }
         spinner = $(spinner);
         submitBtn.prop("disabled", state);
