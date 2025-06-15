@@ -22,9 +22,10 @@ $(document).ready(function () {
             $(this).data("loder-function-name") ?? "setAjaxBtnLoader";
         const ajaxDataTableClass =
             $(this).data("ajax-data-table-class") ?? "ajaxDataTable";
-
+        const otherData = $(this).data("ajax-other-data") ?? {};
         const data = {
             id: DataId,
+            ...otherData
         };
         swalConfirmMessage({
             title: ConfirmMessage,
@@ -94,5 +95,7 @@ $(document).ready(function () {
         2. swalEventObj => swal dissmiss event obj
         ->in this method you set action that perform after success
 */
+// data-ajax-other-data => json encoded string for send to request
+// data-delete-url => url for request
 // data-ajax-data-table-class => default is ajaxDataTable. name of data talbe class. which is reload after
 //data-confirm-message (optional)=>default "Are You Sure ?" message. set confirm message.
