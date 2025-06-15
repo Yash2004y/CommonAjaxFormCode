@@ -76,7 +76,7 @@
 
                                                     {{-- for delete btn (item-delete-btn class)}}
                                                     {{-- data-loder-function-name (optional) -> default is setAjaxBtnLoader function. function name for set loder when process this function has two argument class name of form and state for loader by default display loader in submit btn of form --}}
-
+{{--  data-ajax-data-table-class => default is ajaxDataTable. name of data talbe class. which is reload after  --}}
                                                     {{--
 
 /* data-after-delete-function  (optional) => default is afterDeleteAction function. function name which is call after response status true and status code 200 it has two argument

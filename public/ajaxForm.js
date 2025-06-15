@@ -23,6 +23,8 @@ $(document).ready(function () {
             $(this).data("common-error-class") ?? "error-common";
         const AfterSuccessForm =
             $(this).data("after-success-function-name") ?? "afterSuccessForm";
+        const ajaxDataTableClass =
+            $(this).data("ajax-data-table-class") ?? "ajaxDataTable";
 
         form.find(`.${CommonErrorClass}`).html("");
         // console.log(`.${CommonErrorClass}`)
@@ -68,8 +70,12 @@ $(document).ready(function () {
                             text: res.message,
                             action: (e) => {
                                 if (typeof window[AfterSuccessForm] === "function") {
-                                    window[AfterSuccessForm](res,form, e);
+                                    window[AfterSuccessForm](res, form, e);
                                 }
+                                if ($(`.${ajaxDataTableClass}`)) {
+                                    $(`.${ajaxDataTableClass}`).DataTable().ajax.reload()
+                                }
+
                             },
                         });
                     } else {
@@ -127,6 +133,7 @@ $(document).ready(function () {
         ->in this method you set action that perform after  success
 */
 
+// data-ajax-data-table-class => default is ajaxDataTable. name of data talbe class. which is reload after success
 // data-common-error-class this class and error class must be inside form tag
 
 //all override method defind after utils.js

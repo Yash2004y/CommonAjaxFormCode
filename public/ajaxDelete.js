@@ -20,6 +20,9 @@ $(document).ready(function () {
             btn.data("after-delete-function") ?? "afterDeleteAction";
         const LoderFunctionName =
             $(this).data("loder-function-name") ?? "setAjaxBtnLoader";
+        const ajaxDataTableClass =
+            $(this).data("ajax-data-table-class") ?? "ajaxDataTable";
+
         const data = {
             id: DataId,
         };
@@ -36,13 +39,11 @@ $(document).ready(function () {
                             url: DeleteUrl,
                             data: data,
                             headers: {
-                                "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf-token"]'
-                                ).attr("content"),
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                             },
                             method: Method,
                             success: function (res) {
-                                if (typeof window[LoderFunctionName] ==="function") {
+                                if (typeof window[LoderFunctionName] === "function") {
                                     window[LoderFunctionName](btn, false);
                                 }
 
@@ -53,14 +54,18 @@ $(document).ready(function () {
                                         text: res.message,
                                         action: (e) => {
                                             if (typeof window[afterDeleteActionMethod] === "function") {
-                                                window[afterDeleteActionMethod](res,e);
+                                                window[afterDeleteActionMethod](res, e);
                                             }
+                                            if ($(`.${ajaxDataTableClass}`)) {
+                                                $(`.${ajaxDataTableClass}`).DataTable().ajax.reload()
+                                            }
+
                                         },
                                     });
                                 }
                             },
                             error: function (xhr, status, error) {
-                                if (typeof window[LoderFunctionName] ==="function") {
+                                if (typeof window[LoderFunctionName] === "function") {
                                     window[LoderFunctionName](btn, false);
                                 }
 
@@ -68,7 +73,7 @@ $(document).ready(function () {
                                 var status = xhr.status;
                                 if (errorRes) {
                                     swalMessage({
-                                        title:"Error",
+                                        title: "Error",
                                         text: errorRes?.message ?? "",
                                         icon: "error",
                                     });
@@ -89,4 +94,5 @@ $(document).ready(function () {
         2. swalEventObj => swal dissmiss event obj
         ->in this method you set action that perform after success
 */
+// data-ajax-data-table-class => default is ajaxDataTable. name of data talbe class. which is reload after
 //data-confirm-message (optional)=>default "Are You Sure ?" message. set confirm message.

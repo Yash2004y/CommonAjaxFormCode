@@ -50,6 +50,7 @@
                                         ->in this method you set action that perform after submit form or success
 
                                 --}}
+                                {{-- data-ajax-data-table-class => default is ajaxDataTable. name of data talbe class. which is reload after  --}}
                                 {{--
                                     data-common-error-class this class and error class must be inside form tag
                                 --}}
