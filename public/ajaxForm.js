@@ -68,7 +68,7 @@ $(document).ready(function () {
                             text: res.message,
                             action: (e) => {
                                 if (typeof window[AfterSuccessForm] === "function") {
-                                    window[AfterSuccessForm](res, e);
+                                    window[AfterSuccessForm](res,form, e);
                                 }
                             },
                         });
@@ -122,6 +122,7 @@ $(document).ready(function () {
 
 /* data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument
         1. res -> response of ajax
+        2. form => current form object
         2. swalEventObj => swal dissmiss event obj
         ->in this method you set action that perform after  success
 */

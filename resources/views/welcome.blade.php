@@ -45,6 +45,7 @@
                                 {{-- data-common-error-class (optional) -> default is error-common class. set class name which available in each error display span or small (use for clear error) --}}
                                 {{-- data-after-success-function-name  (optional) => default is afterSuccessForm function. function name which is call after response status true and status code 200 it has two argument
                                         1. res -> response of ajax
+                                        2. form => current form object
                                         2. swalEventObj => swal dissmiss event obj
                                         ->in this method you set action that perform after submit form or success
 
