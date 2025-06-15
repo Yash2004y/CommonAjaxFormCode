@@ -97,18 +97,28 @@ $(document).ready(function () {
                     var errorRes = xhr.responseJSON;
                     var status = xhr.status;
                     if (status == 422) {
-                        var error = errorRes?.error;
+                        var error = errorRes?.error || errorRes?.errors;
                         Object.entries(error).forEach((item, index) => {
                             const [Key, Value] = item;
                             form.find(`.${Key}-error`).html(Value);
                             // console.log(item);
                         });
                     } else {
-                        swalMessage({
-                            title: "Error",
-                            text: errorRes?.message ?? "",
-                            icon: "error",
-                        });
+                        if (errorRes?.errors || errorRes?.error) {
+                            var error = errorRes?.error || errorRes?.errors;
+                            Object.entries(error).forEach((item, index) => {
+                                const [Key, Value] = item;
+                                form.find(`.${Key}-error`).html(Value);
+                                // console.log(item);
+                            });
+                        }
+                        else {
+                            swalMessage({
+                                title: "Error",
+                                text: errorRes?.message ?? "",
+                                icon: "error",
+                            });
+                        }
                     }
                 },
             });
