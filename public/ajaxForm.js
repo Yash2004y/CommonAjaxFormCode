@@ -25,7 +25,8 @@ $(document).ready(function () {
             $(this).data("after-success-function-name") ?? "afterSuccessForm";
         const ajaxDataTableClass =
             $(this).data("ajax-data-table-class") ?? "ajaxDataTable";
-
+        const ajaxModalClass =
+            $(this).data("ajax-modal-class") ?? "ajaxModal";
         form.find(`.${CommonErrorClass}`).html("");
         // console.log(`.${CommonErrorClass}`)
         // const submitter = e.originalEvent?.submitter;
@@ -71,6 +72,9 @@ $(document).ready(function () {
                             action: (e) => {
                                 if (typeof window[AfterSuccessForm] === "function") {
                                     window[AfterSuccessForm](res, form, e);
+                                }
+                                 if ($(`.${ajaxModalClass}`)){
+                                    $(`.${ajaxModalClass}`).modal('hide');
                                 }
                                 if ($(`.${ajaxDataTableClass}`)) {
                                     $(`.${ajaxDataTableClass}`).DataTable().ajax.reload()
@@ -146,4 +150,5 @@ $(document).ready(function () {
 // data-ajax-data-table-class => default is ajaxDataTable. name of data talbe class. which is reload after success
 // data-common-error-class this class and error class must be inside form tag
 
+//data-ajax-modal-class => default is ajaxModal, name of the modal class which is close after submit form.
 //all override method defind after utils.js

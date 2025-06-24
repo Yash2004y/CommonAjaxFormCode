@@ -54,6 +54,8 @@
                                 {{--
                                     data-common-error-class this class and error class must be inside form tag
                                 --}}
+
+                                {{-- data-ajax-modal-class => default is ajaxModal, name of the modal class which is close after submit form. --}}
                                 {{-- ->all override method defind after utils.js --}}
                                 @csrf
                                 <div class="col-md-6">
