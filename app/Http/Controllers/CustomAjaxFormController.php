@@ -134,6 +134,7 @@ class CustomAjaxFormController extends Controller
                 "message" => "User " . (empty($id) ? "Added" : "Updated"),
                 "status" => true,
                 "data" => $user,
+                // "isDisplaySuccessMessage" => false, //pass it with false if you not display message after success
                 "redirect" => route('list')
             ]);
         } catch (Exception $e) {

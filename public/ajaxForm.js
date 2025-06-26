@@ -1,7 +1,8 @@
-function afterSuccessForm(res, swalAction) {
+function afterSuccessForm(res, form, swalAction = null) {
     //res is response of ajax (when status true and status  code 200)
-    //swalAction is a event obj of swal dismiss
+    //swalAction is a event obj of swal dismiss (it is not given when isDisplaySuccessMessage is false with status 200 in response )
     // console.log(res, swalAction);
+    //form object of form
 
     if (res.redirect && res.redirect != "") {
         window.location.href = res.redirect;
@@ -64,24 +65,34 @@ $(document).ready(function () {
                         window[LoderFunctionName](submitBtn, false);
                     }
 
+                    var isDisplayMessage = res?.isDisplaySuccessMessage ?? true;
+
                     // console.log(res);
                     if (res.status) {
-                        swalMessage({
-                            title: "Success",
-                            text: res.message,
-                            action: (e) => {
-                                if (typeof window[AfterSuccessForm] === "function") {
-                                    window[AfterSuccessForm](res, form, e);
-                                }
-                                 if ($(`.${ajaxModalClass}`)){
-                                    $(`.${ajaxModalClass}`).modal('hide');
-                                }
-                                if ($(`.${ajaxDataTableClass}`)) {
-                                    $(`.${ajaxDataTableClass}`).DataTable().ajax.reload()
-                                }
+                        if (isDisplayMessage) {
+                            swalMessage({
+                                title: "Success",
+                                text: res?.message ?? '',
+                                action: (e) => {
+                                    if (typeof window[AfterSuccessForm] === "function") {
+                                        window[AfterSuccessForm](res, form, e);
+                                    }
+                                    if ($(`.${ajaxModalClass}`)) {
+                                        $(`.${ajaxModalClass}`).modal('hide');
+                                    }
+                                    if ($(`.${ajaxDataTableClass}`)) {
+                                        $(`.${ajaxDataTableClass}`).DataTable().ajax.reload()
+                                    }
 
-                            },
-                        });
+                                },
+                            });
+                        }
+                        else {
+                            if (typeof window[AfterSuccessForm] === "function") {
+                                window[AfterSuccessForm](res, form);
+                            }
+                        }
+
                     } else {
                         swalMessage({
                             text: res.message,
@@ -152,3 +163,5 @@ $(document).ready(function () {
 
 //data-ajax-modal-class => default is ajaxModal, name of the modal class which is close after submit form.
 //all override method defind after utils.js
+
+//if you want to not display message on success then pass isDisplaySuccessMessage with false value in status 200.
